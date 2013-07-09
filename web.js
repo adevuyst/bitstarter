@@ -4,7 +4,7 @@ var fs = require('fs');
 var app = express.createServer(express.logger());
 
 app.get('/', function(request, response) {
-  var responseString =  fs.readFile('index.html'); 
+  var responseString =  fs.readFile('~/bitstarter/index.html'); 
   response.send(responseString);
 });
 
