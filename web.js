@@ -6,6 +6,7 @@ var app = express.createServer(express.logger());
 app.get('/', function(request, response) {
 
 var responseString= ''; 
+var fileName='index.html';
 
 fs.exists(fileName, function(exists) {
   if (exists) {
