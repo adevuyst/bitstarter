@@ -46,7 +46,6 @@ var loadChecks = function(checksfile) {
 };
 
 var checkHtmlFile = function(htmlfile, checksfile) {
-    if(url)
 	
     $ = cheerioHtmlFile(htmlfile);
     var checks = loadChecks(checksfile).sort();
@@ -65,6 +64,7 @@ var clone = function(fn) {
 };
 
 var processFile = function(file, checks){
+    console.log("processing file: " + file);
     var checkJson = checkHtmlFile(file, checks);
     var outJson = JSON.stringify(checkJson, null, 4);
     console.log(outJson);
@@ -74,17 +74,18 @@ if(require.main == module) {
     program
         .option('-c, --checks <check_file>', 'Path to checks.json', clone(assertFileExists), CHECKSFILE_DEFAULT)
         .option('-f, --file <html_file>', 'Path to index.html', clone(assertFileExists), HTMLFILE_DEFAULT)
-	.option('-u, --url <html_url>', 'Path to index.html', clone(assertFileExists), HTMLFILE_DEFAULT)
+	.option('-u, --url <html_url>', 'Path to index.html', true, HTMLFILE_DEFAULT)
         .parse(process.argv);
 
-    if(program.url and program.url.length > 0){
+    if(program.url && program.url.length > 0){
 	var file = fs.createWriteStream("file.html");
+	console.log("getting file: " + program.url);
 	var request = http.get(program.url, function(response) {
 	    response.pipe(file, program.checks);
-	    processfile("file.html");
+	    processFile("file.html");
 	});
     }else {
-	processfile(program.file, program.checks);
+	processFile(program.file, program.checks);
     }
 } else {
     exports.checkHtmlFile = checkHtmlFile;
